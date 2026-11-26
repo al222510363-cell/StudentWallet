@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#17122f" />
+  <title>StudentWallet | Tu asistente financiero con IA</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/budgets.css" />
+  <link rel="stylesheet" href="css/goals.css" />
+  <link rel="stylesheet" href="css/achievements.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="StudentWallet inicio">
+        <span class="brand-mark">▣</span>
+        <span class="brand-copy"><strong>StudentWallet</strong><small>Tu asistente financiero con IA</small></span>
+      </a>
+
+      <div class="nav-label">MENÚ PRINCIPAL</div>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <button class="nav-link active" data-view="dashboard"><span class="nav-icon">⌂</span><span>Inicio / Dashboard</span></button>
+        <button class="nav-link" data-view="transactions"><span class="nav-icon">⇄</span><span>Ingresos y gastos</span></button>
+        <button class="nav-link" data-view="assistant"><span class="nav-icon">✧</span><span>Asistente Gemini AI</span><span class="nav-pill">IA</span></button>
+        <button class="nav-link" data-view="budgets"><span class="nav-icon">◷</span><span>Presupuestos</span></button>
+        <button class="nav-link" data-view="goals"><span class="nav-icon">◎</span><span>Metas de ahorro</span></button>
+        <button class="nav-link" data-view="achievements"><span class="nav-icon">♜</span><span>Logros e insignias</span></button>
+      </nav>
+
+      <div class="sidebar-divider"></div>
+      <div class="nav-label">CUENTA</div>
+      <nav class="main-nav">
+        <button class="nav-link" data-view="profile"><span class="nav-icon">⚙</span><span>Perfil y ajustes</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="student-card-art" aria-hidden="true">
+          <div class="cap">◆</div><div class="book"></div><div class="coin coin-one">$</div><div class="coin coin-two">$</div>
+        </div>
+        <div class="sidebar-tip"><span class="tip-spark">✦</span><p><strong>Pequeños hábitos,</strong><br />grandes metas.</p></div>
+        <button class="nav-link logout" id="logoutButton"><span class="nav-icon">↪</span><span>Cerrar sesión</span></button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="mobileMenu" aria-label="Abrir menú">☰</button>
+        <div class="page-heading"><span class="heading-icon">▥</span><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="topbar-actions">
+          <label class="search-box"><span>⌕</span><input type="search" placeholder="Buscar..." aria-label="Buscar" /></label>
+          <button class="icon-button notification-button" aria-label="Notificaciones">♧<i></i></button>
+          <div class="top-divider"></div>
+          <button class="profile-menu" id="profileMenu"><span class="avatar">GA</span><span><strong>Gustavo A.</strong><small>Estudiante</small></span><span class="chevron">⌄</span></button>
+        </div>
+      </header>
+
+      <div class="content-wrap">
+        <section class="view active-view" id="view-dashboard">
+          <div class="welcome-row">
+            <div><p class="eyebrow">TU RESUMEN FINANCIERO</p><h2>👋 ¡Hola, Gustavo!</h2><p class="welcome-subtitle">Aquí tienes un resumen de tus finanzas y recomendaciones de Gemini.</p></div>
+            <label class="month-select"><span>▦</span><select id="monthSelect" aria-label="Mes"></select></label>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="dashboard-main-column">
+              <div class="summary-grid">
+                <article class="balance-card">
+                  <div class="card-overline">Balance del mes</div>
+                  <div class="balance-value" id="balanceValue">$1,350.00</div>
+                  <div class="balance-trend"><span>↗ +12.5%</span> respecto al mes anterior</div>
+                  <div class="wallet-illustration" aria-hidden="true">▰</div>
+                  <div class="balance-glow"></div>
+                </article>
+                <article class="summary-card income-card"><div class="summary-top"><span class="summary-icon">↓</span><span>Ingresos del mes</span></div><strong id="incomeValue">$4,000.00</strong><small>Entradas registradas</small></article>
+                <article class="summary-card expense-card"><div class="summary-top"><span class="summary-icon">↑</span><span>Gastos del mes</span></div><strong id="expenseValue">$2,650.00</strong><small>Salidas registradas</small></article>
+              </div>
+
+              <div class="analytics-grid">
+                <article class="panel chart-panel">
+                  <div class="panel-heading"><div><h3>Ingresos vs. gastos</h3><p>Últimos seis meses · datos de PostgreSQL</p></div><div class="legend"><span><i class="legend-income"></i>Ingresos</span><span><i class="legend-expense"></i>Gastos</span></div></div>
+                  <div class="bar-chart" id="dashboardMonthlyChart" role="img" aria-label="Gráfica de ingresos y gastos calculada desde tus movimientos registrados">
+                    <div class="y-axis" id="dashboardChartAxis"><span>$0</span><span>$0</span><span>$0</span><span>$0</span><span>$0</span><span>$0</span></div>
+                    <div class="plot-area">
+                      <div class="grid-lines"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                      <div class="bar-groups" id="dashboardBarGroups"></div>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="panel category-panel">
+                  <div class="panel-heading"><div><h3>Gastos por categoría</h3><p>Distribución de este mes</p></div><button class="text-button" data-view="transactions">Ver detalle ↗</button></div>
+                  <div class="category-content"><div class="donut-wrap"><div class="donut"><div><strong id="categoryTotal">$2,650</strong><small>Total</small></div></div></div><div class="category-legend" id="categoryLegend"><div><i class="cat-food"></i><span>Alimentación</span><b>40%</b></div><div><i class="cat-transport"></i><span>Transporte</span><b>20%</b></div><div><i class="cat-school"></i><span>Escuela</span><b>15%</b></div><div><i class="cat-fun"></i><span>Entretenimiento</span><b>10%</b></div><div><i class="cat-other"></i><span>Otros</span><b>15%</b></div></div></div>
+                </article>
+              </div>
+
+              <div class="lower-grid">
+                <article class="panel transactions-panel">
+                  <div class="panel-heading"><div><h3>Últimos movimientos</h3><p>Tus operaciones recientes</p></div><button class="text-button" data-view="transactions">Ver todos →</button></div>
+                  <div class="transaction-list" id="recentTransactions">
+                    <div class="transaction-row"><span class="transaction-symbol positive">↓</span><div class="transaction-info"><strong>Beca escolar</strong><small>Ingreso · Hoy</small></div><b class="amount positive-text">+$4,000.00</b></div>
+                    <div class="transaction-row"><span class="transaction-symbol negative">↑</span><div class="transaction-info"><strong>Supermercado</strong><small>Gasto · Ayer</small></div><b class="amount negative-text">−$580.00</b></div>
+                    <div class="transaction-row"><span class="transaction-symbol negative">↑</span><div class="transaction-info"><strong>Transporte</strong><small>Gasto · 14 Nov</small></div><b class="amount negative-text">−$320.00</b></div>
+                  </div>
+                </article>
+                <article class="panel goal-panel">
+                  <div class="panel-heading"><div><h3>Meta de ahorro</h3><p>Tu objetivo destacado</p></div><button class="text-button" data-view="goals">Ver metas →</button></div>
+                  <div class="goal-summary"><div class="goal-icon">🎯</div><div><strong id="dashboardGoalTitle">Aún no tienes metas</strong><small id="dashboardGoalDetails">Crea tu primer objetivo de ahorro</small></div></div>
+                  <div class="progress-line"><span id="dashboardGoalProgress" style="width:0%"></span></div><div class="progress-caption"><small id="dashboardGoalCaption">Comienza con una meta pequeña</small><b id="dashboardGoalPercent">0%</b></div>
+                </article>
+                <article class="panel achievements-panel">
+                  <div class="panel-heading"><div><h3>Mis logros</h3><p>Sigue construyendo buenos hábitos</p></div><button class="text-button" data-view="achievements">Ver todos →</button></div>
+                  <div class="mini-achievements" id="dashboardMiniAchievements"><p class="mini-achievements-loading">Cargando insignias...</p></div>
+                  <div class="points-strip"><span><strong id="dashboardAchievementPoints">0</strong> puntos</span><span><strong id="dashboardAchievementCount">0 / 7</strong> insignias</span></div>
+                  <div class="dashboard-achievement-level" id="dashboardAchievementLevel">Nivel 1 · Principiante</div>
+                </article>
+              </div>
+
+              <article class="gemini-recommendation"><div class="recommendation-icon">✧</div><div class="recommendation-title"><strong>Recomendación de Gemini</strong><span>IA</span></div><p>Haz una consulta en el panel de Gemini para recibir recomendaciones basadas en tu resumen financiero actual.</p><small>Las recomendaciones personalizadas se generan desde el asistente StudentWallet AI.</small></article>
+            </div>
+
+            <aside class="gemini-card" id="geminiCard">
+              <div class="gemini-header"><span class="gemini-star">✦</span><div><h3>Gemini AI</h3><p>Tu asesor financiero inteligente</p></div><span class="powered-label">✦ Gemini</span></div>
+              <div class="quick-chat-messages" id="quickChatMessages" aria-live="polite">
+                <div class="bot-welcome"><div class="bot-avatar">◉</div><div class="bot-bubble">¡Hola! Soy StudentWallet AI. Puedo analizar tus movimientos y ayudarte a tomar mejores decisiones. 💜</div></div>
+              </div>
+              <div class="suggested-title">Preguntas sugeridas</div>
+              <div class="suggested-questions"><button type="button" data-question="¿En qué estoy gastando más?">▥ <span>¿En qué estoy gastando más?</span><b>→</b></button><button type="button" data-question="¿Cómo puedo ahorrar este mes?">◎ <span>¿Cómo puedo ahorrar este mes?</span><b>→</b></button><button type="button" data-question="Ayúdame a crear un presupuesto.">▤ <span>Ayúdame a crear un presupuesto.</span><b>→</b></button></div>
+              <div class="chat-notice" id="quickChatNotice">Conectado mediante la API de StudentWallet. Las respuestas las genera Gemini.</div>
+              <form class="chat-input" id="quickChatForm"><input id="quickChatInput" type="text" maxlength="1000" placeholder="Escribe tu pregunta..." aria-label="Escribe tu pregunta" autocomplete="off" /><button id="quickChatSend" type="submit" aria-label="Enviar pregunta">➤</button></form>
+            </aside>
+          </div>
+          <p class="demo-disclaimer">Datos ilustrativos de demostración. No representan una cuenta ni movimientos reales.</p>
+        </section>
+
+        <section class="view transactions-view" id="view-transactions">
+          <div class="transactions-intro">
+            <div>
+              <p class="eyebrow">CONTROL FINANCIERO</p>
+              <h2>Ingresos y gastos</h2>
+              <p class="welcome-subtitle">Registra y organiza cada movimiento de tu dinero.</p>
+            </div>
+            <button class="primary-button" id="addTransactionButton" type="button"><span>＋</span> Nuevo movimiento</button>
+          </div>
+
+          <div class="transaction-stats">
+            <article class="transaction-stat income-stat"><div class="stat-icon">↓</div><div><small>Ingresos registrados</small><strong id="transactionsIncomeTotal">$4,000.00</strong><span>Entradas de dinero</span></div></article>
+            <article class="transaction-stat expense-stat"><div class="stat-icon">↑</div><div><small>Gastos registrados</small><strong id="transactionsExpenseTotal">$2,650.00</strong><span>Salidas de dinero</span></div></article>
+            <article class="transaction-stat balance-stat"><div class="stat-icon">▣</div><div><small>Balance de movimientos</small><strong id="transactionsBalanceTotal">$1,350.00</strong><span>Ingresos menos gastos</span></div></article>
+          </div>
+
+          <article class="panel transactions-manager">
+            <div class="panel-heading manager-heading">
+              <div><h3>Todos los movimientos</h3><p id="transactionCount">5 movimientos registrados</p></div>
+              <span class="crud-indicator"><i></i> Gestión de movimientos</span>
+            </div>
+            <div class="transaction-filters">
+              <label class="filter-search"><span>⌕</span><input id="transactionSearch" type="search" placeholder="Buscar por descripción..." aria-label="Buscar movimientos" /></label>
+              <label class="filter-select"><span>Tipo</span><select id="transactionTypeFilter"><option value="all">Todos</option><option value="income">Ingresos</option><option value="expense">Gastos</option></select></label>
+              <label class="filter-select"><span>Categoría</span><select id="transactionCategoryFilter"><option value="all">Todas</option><option>Alimentación</option><option>Transporte</option><option>Escuela</option><option>Entretenimiento</option><option>Beca</option><option>Trabajo</option><option>Otros</option></select></label>
+              <button class="clear-filters" id="clearTransactionFilters" type="button">Limpiar filtros</button>
+            </div>
+            <div class="transactions-table-wrap">
+              <table class="transactions-table">
+                <thead><tr><th>Movimiento</th><th>Categoría</th><th>Fecha</th><th>Tipo</th><th class="align-right">Importe</th><th class="align-right">Acciones</th></tr></thead>
+                <tbody id="transactionsTableBody"></tbody>
+              </table>
+              <div class="transactions-empty" id="transactionsEmpty" hidden>
+                <span>⌕</span><strong>No encontramos movimientos</strong><p>Prueba cambiando los filtros o registra un nuevo movimiento.</p>
+              </div>
+            </div>
+            <div class="table-footer"><span id="transactionResults">Mostrando 5 movimientos</span><span>Los movimientos se almacenan en la base de datos PostgreSQL.</span></div>
+          </article>
+          <p class="demo-disclaimer transaction-disclaimer">Los movimientos se guardan mediante nuestra API REST desarrollada con FastAPI y PostgreSQL.</p>
+        </section>
+        <section class="view assistant-view" id="view-assistant">
+          <div class="assistant-page-intro">
+            <div><p class="eyebrow">TU ASESOR FINANCIERO INTELIGENTE</p><h2>Conversa con StudentWallet AI</h2><p class="welcome-subtitle">Gemini analiza el resumen de tus movimientos para darte orientación basada en tus datos.</p></div>
+            <span class="assistant-powered"><span>✦</span> Powered by Google Gemini</span>
+          </div>
+          <div class="assistant-layout">
+            <section class="assistant-chat-panel" aria-label="Chat con StudentWallet AI">
+              <header class="assistant-chat-top">
+                <div class="assistant-identity"><span class="assistant-avatar">✦</span><div><strong>StudentWallet AI</strong><small>Asistente financiero para estudiantes</small></div></div>
+                <span class="assistant-live-status" id="assistantConnectionStatus"><i></i> Listo para conversar</span>
+              </header>
+              <div class="assistant-messages" id="assistantMessages" aria-live="polite" aria-relevant="additions">
+                <div class="assistant-message assistant-message-ai"><span class="message-avatar">✦</span><div class="assistant-message-bubble"><strong>¡Hola, Gustavo!</strong><p>Soy tu asistente financiero. Puedo revisar tus ingresos, gastos y categorías para ayudarte a organizar tu dinero. ¿Qué te gustaría consultar?</p><small>StudentWallet AI · Gemini</small></div></div>
+              </div>
+              <div class="assistant-prompts-wrap"><span class="assistant-prompts-label">PRUEBA CON UNA PREGUNTA</span><div class="assistant-prompts">
+                <button type="button" data-assistant-question="Analiza mis finanzas actuales y dame tres recomendaciones para ahorrar.">✧ Analiza mis finanzas</button>
+                <button type="button" data-assistant-question="¿En qué categoría estoy gastando más dinero?">▥ ¿Dónde gasto más?</button>
+                <button type="button" data-assistant-question="Ayúdame a organizar un presupuesto para este mes.">◎ Organizar mi presupuesto</button>
+              </div></div>
+              <form class="assistant-composer" id="assistantChatForm">
+                <label class="sr-only" for="assistantChatInput">Escribe tu pregunta para Gemini</label>
+                <textarea id="assistantChatInput" rows="1" maxlength="1000" placeholder="Pregúntale a Gemini sobre tus finanzas..." autocomplete="off" required></textarea>
+                <button type="submit" id="assistantSendButton" aria-label="Enviar pregunta">➤</button>
+              </form>
+              <div class="assistant-composer-footer"><span id="assistantStatus">Tus consultas se envían a Gemini mediante nuestro backend FastAPI.</span><span>Enter para enviar · Shift + Enter para salto de línea</span></div>
+            </section>
+            <aside class="assistant-context-column">
+              <article class="assistant-context-card">
+                <div class="assistant-context-heading"><span>▥</span><div><strong>Tu resumen financiero</strong><small>Datos actuales de PostgreSQL</small></div></div>
+                <div class="assistant-context-metric"><span>Ingresos</span><strong class="income-text" id="assistantIncome">—</strong></div>
+                <div class="assistant-context-metric"><span>Gastos</span><strong class="expense-text" id="assistantExpenses">—</strong></div>
+                <div class="assistant-context-balance"><span>Saldo disponible</span><strong id="assistantBalance">—</strong></div>
+                <div class="assistant-context-categories"><strong>Gastos por categoría</strong><div id="assistantCategoryList"><p>Consultando información...</p></div></div>
+                <button class="assistant-refresh-button" id="refreshAssistantSummary" type="button">↻ Actualizar resumen</button>
+              </article>
+              <article class="assistant-guidance-card"><span class="guidance-spark">✦</span><h3>Consejos con contexto</h3><p>Gemini recibe el resumen de tus movimientos para ofrecerte sugerencias más relevantes. Las operaciones y los saldos se calculan en StudentWallet, no en la IA.</p></article>
+            </aside>
+          </div>
+          <p class="assistant-disclaimer">Las respuestas de IA son orientativas. Revisa tus movimientos y utiliza tu propio criterio antes de tomar decisiones financieras.</p>
+        </section>
+        <section class="view budgets-view" id="view-budgets">
+          <div class="budgets-intro">
+            <div>
+              <p class="eyebrow">CONTROL FINANCIERO</p>
+              <h2>Mis presupuestos</h2>
+              <p class="welcome-subtitle">Define límites por categoría y mantén tus gastos bajo control.</p>
+            </div>
+            <label class="budget-month-control">
+              <span>Periodo</span>
+              <input id="budgetMonth" type="month" aria-label="Mes de los presupuestos" required />
+            </label>
+          </div>
+
+          <div class="budget-summary-grid">
+            <article class="budget-summary-card budget-summary-limit">
+              <span class="budget-summary-icon">▤</span>
+              <div><small>Presupuesto asignado</small><strong id="budgetTotalLimit">$0.00</strong><span>Límites de todas las categorías</span></div>
+            </article>
+            <article class="budget-summary-card budget-summary-spent">
+              <span class="budget-summary-icon">↗</span>
+              <div><small>Gastado en categorías presupuestadas</small><strong id="budgetTotalSpent">$0.00</strong><span>Gastos de las categorías controladas</span></div>
+            </article>
+            <article class="budget-summary-card budget-summary-available">
+              <span class="budget-summary-icon">◎</span>
+              <div><small>Disponible en presupuestos</small><strong id="budgetTotalRemaining">$0.00</strong><span>Límites menos gastos controlados</span></div>
+            </article>
+          </div>
+
+          <div class="budget-content-grid">
+            <article class="panel budget-form-panel">
+              <div class="panel-heading">
+                <div><h3 id="budgetFormTitle">Crear presupuesto</h3><p>Agrega un límite para una categoría.</p></div>
+                <span class="budget-form-icon">＋</span>
+              </div>
+              <form id="budgetForm" class="budget-form">
+                <input type="hidden" id="budgetId" />
+                <label class="budget-field">
+                  <span>Categoría de gasto</span>
+                  <select id="budgetCategory" required>
+                    <option value="Alimentación">🍽️ Alimentación</option>
+                    <option value="Transporte">🚌 Transporte</option>
+                    <option value="Escuela">📚 Escuela</option>
+                    <option value="Entretenimiento">🎮 Entretenimiento</option>
+                    <option value="Otros">📌 Otros</option>
+                    <option value="Trabajo">💼 Trabajo</option>
+                    <option value="Beca">🎓 Beca</option>
+                  </select>
+                </label>
+                <label class="budget-field">
+                  <span>Límite mensual (MXN)</span>
+                  <div class="budget-amount-input"><span>$</span><input id="budgetLimitAmount" type="number" min="0.01" max="9999999999.99" step="0.01" placeholder="Ej. 1500.00" required /></div>
+                </label>
+                <div class="budget-selected-month">Este presupuesto corresponde a <strong id="budgetSelectedMonth">—</strong>.</div>
+                <div class="budget-form-actions">
+                  <button class="primary-button" id="saveBudgetButton" type="submit">Guardar presupuesto</button>
+                  <button class="secondary-button" id="cancelBudgetEdit" type="button" hidden>Cancelar</button>
+                </div>
+              </form>
+              <p class="budget-form-note">Solo se contabilizan movimientos de tipo gasto cuya categoría coincide con el presupuesto.</p>
+            </article>
+
+            <article class="panel budget-list-panel">
+              <div class="panel-heading budget-list-heading">
+                <div><h3>Presupuestos del mes</h3><p id="budgetCount">Cargando categorías...</p></div>
+                <span class="budget-status-key"><i></i> Seguimiento automático</span>
+              </div>
+              <div id="budgetList" class="budget-list" aria-live="polite">
+                <div class="budget-empty-state"><span>◷</span><strong>Cargando presupuestos...</strong></div>
+              </div>
+            </article>
+          </div>
+          <p class="budget-disclaimer">El gasto se calcula automáticamente desde tus movimientos guardados en PostgreSQL. Los presupuestos no modifican tus transacciones.</p>
+        </section>
+        <section class="view goals-view" id="view-goals">
+          <div class="goals-intro">
+            <div>
+              <p class="eyebrow">PLANES DE AHORRO</p>
+              <h2>Mis metas de ahorro</h2>
+              <p class="welcome-subtitle">Define objetivos, registra tus aportaciones y sigue cada avance.</p>
+            </div>
+            <span class="goals-intro-badge">◎ Ahorra a tu ritmo</span>
+          </div>
+
+          <div class="goal-summary-grid">
+            <article class="goal-summary-card goal-summary-target">
+              <span class="goal-summary-icon">◎</span>
+              <div><small>Objetivo total</small><strong id="goalsTotalTarget">$0.00</strong><span>Suma de todas tus metas</span></div>
+            </article>
+            <article class="goal-summary-card goal-summary-saved">
+              <span class="goal-summary-icon">↗</span>
+              <div><small>Ahorro acumulado</small><strong id="goalsTotalSaved">$0.00</strong><span>Aportaciones registradas</span></div>
+            </article>
+            <article class="goal-summary-card goal-summary-completed">
+              <span class="goal-summary-icon">✓</span>
+              <div><small>Metas cumplidas</small><strong id="goalsCompletedCount">0</strong><span id="goalsActiveCount">0 metas en progreso</span></div>
+            </article>
+          </div>
+
+          <div class="goal-content-grid">
+            <article class="panel goal-form-panel">
+              <div class="panel-heading">
+                <div><h3 id="goalFormTitle">Crear meta de ahorro</h3><p>Establece cuánto quieres reunir.</p></div>
+                <span class="goal-form-icon">＋</span>
+              </div>
+              <form id="goalForm" class="goal-form">
+                <input type="hidden" id="goalId" />
+                <label class="goal-field">
+                  <span>Nombre de la meta</span>
+                  <input id="goalTitle" type="text" maxlength="90" placeholder="Ej. Comprar una laptop" required />
+                </label>
+                <label class="goal-field">
+                  <span>Descripción (opcional)</span>
+                  <textarea id="goalDescription" rows="2" maxlength="200" placeholder="¿Para qué estás ahorrando?"></textarea>
+                </label>
+                <label class="goal-field">
+                  <span>Cantidad objetivo (MXN)</span>
+                  <div class="goal-amount-input"><span>$</span><input id="goalTargetAmount" type="number" min="0.01" max="9999999999.99" step="0.01" placeholder="Ej. 8000.00" required /></div>
+                </label>
+                <label class="goal-field">
+                  <span>Fecha objetivo (opcional)</span>
+                  <input id="goalTargetDate" type="date" />
+                </label>
+                <div class="goal-form-actions">
+                  <button class="primary-button" id="saveGoalButton" type="submit">Guardar meta</button>
+                  <button class="secondary-button" id="cancelGoalEdit" type="button" hidden>Cancelar</button>
+                </div>
+              </form>
+              <p class="goal-form-note">Las aportaciones se registran por separado. No modifican tus ingresos ni movimientos financieros.</p>
+            </article>
+
+            <article class="panel goal-list-panel">
+              <div class="panel-heading goal-list-heading">
+                <div><h3>Mis objetivos</h3><p id="goalCount">Cargando metas...</p></div>
+                <span class="goal-status-key"><i></i> Seguimiento de ahorro</span>
+              </div>
+              <div id="goalList" class="goal-list" aria-live="polite">
+                <div class="goal-empty-state"><span>◎</span><strong>Cargando tus metas...</strong></div>
+              </div>
+            </article>
+          </div>
+          <p class="goal-disclaimer">El ahorro acumulado se calcula desde las aportaciones registradas en PostgreSQL. Crear una meta no mueve dinero de tu cuenta.</p>
+        </section>
+        <section class="view achievements-view" id="view-achievements">
+          <div class="achievements-intro">
+            <div>
+              <p class="eyebrow">TU PROGRESO FINANCIERO</p>
+              <h2>Logros e insignias</h2>
+              <p class="welcome-subtitle">Cada buen hábito suma. Desbloquea insignias y avanza junto al cuervo de StudentWallet.</p>
+            </div>
+            <span class="achievements-intro-tag"><span class="achievements-dot"></span> Colección StudentWallet</span>
+          </div>
+
+          <div class="achievements-overview">
+            <article class="achievement-level-card">
+              <div class="achievement-mascot-wrap" id="achievementMascot">
+                <span class="achievement-mascot-aura"></span>
+                <span class="achievement-mascot-emblem" id="achievementMascotEmblem" aria-hidden="true"></span>
+              </div>
+              <div class="achievement-level-copy">
+                <span class="achievement-small-label">TU NIVEL ACTUAL</span>
+                <h3 id="achievementLevelName">Principiante</h3>
+                <p id="achievementLevelSubtitle">Comienza a construir tus buenos hábitos financieros.</p>
+                <div class="achievement-level-progress-track"><span id="achievementLevelProgress" style="width:0%"></span></div>
+                <div class="achievement-level-progress-caption"><span id="achievementLevelProgressLabel">0 puntos</span><strong id="achievementLevelNext">40 puntos para Organizado</strong></div>
+              </div>
+              <div class="achievement-level-number" id="achievementLevelNumber">01</div>
+            </article>
+
+            <div class="achievement-stat-grid">
+              <article class="achievement-stat-card">
+                <span class="achievement-stat-icon">✦</span>
+                <small>Puntos acumulados</small>
+                <strong id="achievementPoints">0</strong>
+                <span>Puntos StudentWallet</span>
+              </article>
+              <article class="achievement-stat-card">
+                <span class="achievement-stat-icon">♜</span>
+                <small>Insignias obtenidas</small>
+                <strong id="achievementUnlockedCount">0 / 7</strong>
+                <span>Logros desbloqueados</span>
+              </article>
+              <article class="achievement-stat-card">
+                <span class="achievement-stat-icon">↗</span>
+                <small>Progreso de colección</small>
+                <strong id="achievementCollectionPercent">0%</strong>
+                <span>De las insignias disponibles</span>
+              </article>
+            </div>
+          </div>
+
+          <article class="achievement-next-level-card">
+            <div class="achievement-next-level-heading">
+              <div><span class="achievement-small-label">SIGUIENTE ETAPA</span><h3 id="achievementNextLevelTitle">Nivel 2 · Organizado</h3></div>
+              <strong id="achievementNextLevelPoints">40 puntos</strong>
+            </div>
+            <div class="achievement-next-level-track"><span id="achievementNextLevelProgress" style="width:0%"></span></div>
+            <p id="achievementNextLevelText">Consigue insignias para avanzar al siguiente nivel.</p>
+          </article>
+
+          <div class="achievement-collection-heading">
+            <div><p class="eyebrow">TU COLECCIÓN</p><h3>Insignias disponibles</h3></div>
+            <span id="achievementCollectionCount">0 de 7 desbloqueadas</span>
+          </div>
+          <div class="achievement-grid" id="achievementGrid" aria-live="polite">
+            <div class="achievement-loading-card">Consultando tus logros...</div>
+          </div>
+          <p class="achievement-disclaimer">Los logros se desbloquean automáticamente a partir de tus movimientos, presupuestos y aportaciones guardados en PostgreSQL. Cada insignia y sus puntos se conceden una sola vez.</p>
+        </section>
+        <section class="view placeholder-view" id="view-profile"><div class="placeholder-icon">⚙</div><p class="eyebrow">TU CUENTA</p><h2>Perfil y ajustes</h2><p>Aquí administraremos los datos y preferencias de tu cuenta.</p></section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="transactionModal" hidden>
+    <section class="transaction-modal" role="dialog" aria-modal="true" aria-labelledby="transactionModalTitle">
+      <div class="modal-header"><div><p class="eyebrow">MOVIMIENTOS FINANCIEROS</p><h2 id="transactionModalTitle">Nuevo movimiento</h2><p>Completa los datos para registrar tu operación.</p></div><button class="modal-close" id="closeTransactionModal" type="button" aria-label="Cerrar">×</button></div>
+      <form id="transactionForm">
+        <input type="hidden" id="transactionId" />
+        <div class="form-grid">
+          <label class="form-field full-field"><span>Descripción</span><input id="transactionDescription" name="description" type="text" maxlength="70" placeholder="Ej. Compra de libros" required /></label>
+          <label class="form-field"><span>Tipo de movimiento</span><select id="transactionType" name="type" required><option value="expense">Gasto</option><option value="income">Ingreso</option></select></label>
+          <label class="form-field"><span>Categoría</span><select id="transactionCategory" name="category" required><option>Alimentación</option><option>Transporte</option><option>Escuela</option><option>Entretenimiento</option><option>Beca</option><option>Trabajo</option><option>Otros</option></select></label>
+          <label class="form-field"><span>Importe (MXN)</span><input id="transactionAmount" name="amount" type="number" min="0.01" max="99999999" step="0.01" placeholder="0.00" required /></label>
+          <label class="form-field"><span>Fecha</span><input id="transactionDate" name="date" type="date" required /></label>
+          <label class="form-field full-field"><span>Nota (opcional)</span><textarea id="transactionNote" name="note" rows="2" maxlength="160" placeholder="Agrega un detalle para recordar este movimiento..."></textarea></label>
+        </div>
+        <div class="modal-actions"><button class="secondary-button" id="cancelTransactionButton" type="button">Cancelar</button><button class="primary-button" type="submit" id="saveTransactionButton">Guardar movimiento</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="goalContributionModal" hidden>
+    <section class="transaction-modal goal-contribution-modal" role="dialog" aria-modal="true" aria-labelledby="goalContributionModalTitle">
+      <div class="modal-header">
+        <div><p class="eyebrow">PROGRESO DE AHORRO</p><h2 id="goalContributionModalTitle">Registrar aportación</h2><p id="goalContributionGoalName">Agrega una cantidad a tu meta.</p></div>
+        <button class="modal-close" id="closeGoalContributionModal" type="button" aria-label="Cerrar">×</button>
+      </div>
+      <form id="goalContributionForm">
+        <input type="hidden" id="goalContributionGoalId" />
+        <div class="form-grid">
+          <label class="form-field full-field"><span>Importe de la aportación (MXN)</span><input id="goalContributionAmount" type="number" min="0.01" max="9999999999.99" step="0.01" placeholder="Ej. 250.00" required /></label>
+          <label class="form-field full-field"><span>Fecha de aportación</span><input id="goalContributionDate" type="date" required /></label>
+          <label class="form-field full-field"><span>Nota (opcional)</span><textarea id="goalContributionNote" rows="2" maxlength="160" placeholder="Ej. Ahorro de esta semana"></textarea></label>
+        </div>
+        <div class="modal-actions"><button class="secondary-button" id="cancelGoalContribution" type="button">Cancelar</button><button class="primary-button" id="saveGoalContributionButton" type="submit">Guardar aportación</button></div>
+      </form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>

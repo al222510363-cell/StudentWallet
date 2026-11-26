@@ -1,0 +1,73 @@
+{
+  "info": {
+    "name": "StudentWallet API",
+    "description": "Pruebas de la API REST de StudentWallet: salud, consulta, creación, actualización y eliminación de movimientos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000" },
+    { "key": "transaction_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Sistema",
+      "item": [
+        {
+          "name": "Health check",
+          "request": { "method": "GET", "header": [], "url": "{{base_url}}/api/health" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('La API y PostgreSQL responden', function () {", "  pm.response.to.have.status(200);", "  const body = pm.response.json();", "  pm.expect(body.status).to.eql('ok');", "  pm.expect(body.database).to.eql('connected');", "});"] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Movimientos — CRUD",
+      "item": [
+        {
+          "name": "GET — Listar movimientos",
+          "request": { "method": "GET", "header": [], "url": "{{base_url}}/api/transactions" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Respuesta 200 y cuerpo JSON en formato de lista', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json()).to.be.an('array');", "});"] } } ]
+        },
+        {
+          "name": "POST — Crear gasto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"description\": \"Prueba Postman\",\n  \"type\": \"expense\",\n  \"category\": \"Escuela\",\n  \"amount\": 125.50,\n  \"date\": \"2026-11-22\",\n  \"note\": \"Movimiento creado desde Postman\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/transactions"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Movimiento creado con HTTP 201', function () {", "  pm.response.to.have.status(201);", "  const body = pm.response.json();", "  pm.expect(body.id).to.be.a('number');", "  pm.expect(body.description).to.eql('Prueba Postman');", "  pm.collectionVariables.set('transaction_id', body.id);", "});"] } } ]
+        },
+        {
+          "name": "GET — Consultar movimiento por ID",
+          "request": { "method": "GET", "header": [], "url": "{{base_url}}/api/transactions/{{transaction_id}}" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Movimiento encontrado', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get('transaction_id')));", "});"] } } ]
+        },
+        {
+          "name": "PUT — Actualizar movimiento",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"description\": \"Prueba Postman actualizada\",\n  \"type\": \"expense\",\n  \"category\": \"Escuela\",\n  \"amount\": 150.00,\n  \"date\": \"2026-11-22\",\n  \"note\": \"Movimiento actualizado desde Postman\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/transactions/{{transaction_id}}"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Movimiento actualizado con HTTP 200', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json().description).to.eql('Prueba Postman actualizada');", "});"] } } ]
+        },
+        {
+          "name": "DELETE — Eliminar movimiento",
+          "request": { "method": "DELETE", "header": [], "url": "{{base_url}}/api/transactions/{{transaction_id}}" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Movimiento eliminado con HTTP 204', function () {", "  pm.response.to.have.status(204);", "});"] } } ]
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "GET — Resumen financiero",
+          "request": { "method": "GET", "header": [], "url": "{{base_url}}/api/dashboard/summary" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Resumen contiene ingresos, gastos y balance', function () {", "  pm.response.to.have.status(200);", "  const body = pm.response.json();", "  pm.expect(body).to.have.property('income');", "  pm.expect(body).to.have.property('expenses');", "  pm.expect(body).to.have.property('balance');", "});"] } } ]
+        }
+      ]
+    }
+  ]
+}
